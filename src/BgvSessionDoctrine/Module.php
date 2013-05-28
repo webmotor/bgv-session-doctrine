@@ -63,6 +63,7 @@ class Module
 
                     return $sessionConfig;
                 },
+                // Session manager
                 'session_save_manager' => function ($serviceManager) {
                     $sessionManager = new SessionManager(
                         $serviceManager->get('session_options'),
