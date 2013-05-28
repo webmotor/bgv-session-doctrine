@@ -5,14 +5,14 @@ namespace BgvSessionDoctrine\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
-* @ORM\Entity
+* @ORM\Entity(repositoryClass="BgvSessionDoctrine\Repository\SessionRepository")
 * @ORM\Table(name="BgvSessionDoctrine_Session")
 */
 class Session
 {
     /**
      * @var string
-     * @ORM\Column(type="string", length=32,  nullable=false, unique=true)
+     * @ORM\Column(type="string", length=32,  nullable=false)
      */
     protected $id = '';
 
@@ -27,7 +27,7 @@ class Session
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $lifetime;
-    
+
     /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
