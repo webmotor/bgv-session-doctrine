@@ -1,6 +1,6 @@
 <?php
 
-namespace BgvSessionDoctrine\SaveHandle;
+namespace BgvSessionDoctrine\SaveHandler;
 
 use Zend\Session\SaveHandler;
 
@@ -55,11 +55,9 @@ class DoctrineORM implements SaveHandlerInterface
 
     /**
      * Constructor
-     * @param array $options
      */
-    public function __construct($options)
+    public function __construct()
     {
-        $this->options = $options;
         // \WmRegistry\ServiceLocator - just service locator like \ServiceLocatorFactory\ServiceLocatorFactory
         $this->em = \WmRegistry\ServiceLocator::getInstance()->get('doctrine.entitymanager.orm_default');
     }
