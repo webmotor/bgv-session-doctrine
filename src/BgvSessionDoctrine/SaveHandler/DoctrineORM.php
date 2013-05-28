@@ -2,7 +2,7 @@
 
 namespace BgvSessionDoctrine\SaveHandler;
 
-use Zend\Session\SaveHandler;
+use Zend\Session\SaveHandler\SaveHandlerInterface;
 
 /**
  * Class DoctrineORM.
