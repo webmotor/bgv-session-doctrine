@@ -1,25 +1,29 @@
 {
-    "name": "gabriel403/g403-session-db",
-    "description": "Extension to ZF2 to allow sessions to be stored in the database.",
+    "name": "bugov/bgv-session-doctrine",
+    "description": "Extension to ZF2 to allow sessions to be stored in the database (via Doctrine).",
     "type": "library",
     "keywords": [
         "zf2",
-        "sessions"
+        "sessions",
+        "doctrine"
     ],
-    "homepage": "https://github.com/gabriel403/G403SessionDb",
+    "homepage": "https://github.com/h15/bgv-session-doctrine",
     "authors": [
         {
-            "name": "Gabriel Baker",
-            "email": "gabriel@autonomicpilot.co.uk",
-            "homepage": "http://autonomicpilot.co.uk"
+            "name": "Georgy Bazhukov",
+            "email": "bugov@webmotor.ru",
+            "homepage": "http://gosha.bugov.net/"
         }
     ],
-    "license": "BSD-3-Clause",
+    "license": "The Artistic License 2.0",
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4.0",
         "zendframework/zendframework": "2.*"
     },
     "autoload": {
+        "psr-0": {
+            "BgvSessionDoctrine": "src/"
+        },
         "classmap": [
             "./Module.php"
         ]
