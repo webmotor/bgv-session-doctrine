@@ -40,7 +40,7 @@ class DoctrineORM implements SaveHandlerInterface
      * DoctrineORM repository's name
      * @var string
      */
-    protected $repositoryName = '\BgvSessionDoctrine\Repository\SessionRepository';
+    protected $repositoryName = '\BgvSessionDoctrine\Entity\SessionRepository';
 
     /**
      * Options
@@ -122,7 +122,7 @@ class DoctrineORM implements SaveHandlerInterface
         }
 
         $session->setModify(time());
-        $session->setData((string) $data);
+        $session->setData((string)$data);
         $session->setLifetime($this->lifetime);
 
         $this->em->persist($session);
@@ -156,7 +156,7 @@ class DoctrineORM implements SaveHandlerInterface
     public function gc($maxlifetime)
     {
         $dql = sprintf("DELETE %s AS session WHERE session.modified + session.lifetime < :time", $this->entityName);
-        $this->em->createQuery($dql) ->setParameter('time', time())->execute();
+        $this->em->createQuery($dql)->setParameter('time', time())->execute();
         return true;
     }
 }
