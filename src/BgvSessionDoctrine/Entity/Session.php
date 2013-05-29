@@ -3,16 +3,16 @@
 namespace BgvSessionDoctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityRepository;
 
 /**
-* @ORM\Entity(repositoryClass="BgvSessionDoctrine\Entity\SessionRepository")
+* @ORM\Entity(repositoryClass="BgvSessionDoctrine\Repository\SessionRepository")
 * @ORM\Table(name="session")
 */
 class Session
 {
     /**
      * @var string
+     * @ORM\Id
      * @ORM\Column(type="string", length=32, nullable=false)
      */
     protected $id = '';
@@ -37,6 +37,7 @@ class Session
 
     /**
      * @var string
+     * @ORM\Id
      * @ORM\Column(type="string", length=255,  nullable=false)
      */
     protected $name = 'PHPSESSID';
@@ -120,10 +121,4 @@ class Session
     {
         return $this->name;
     }
-}
-
-
-class SessionRepository extends EntityRepository
-{
-
 }

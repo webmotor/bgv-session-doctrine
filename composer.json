@@ -11,13 +11,13 @@
     "authors": [
         {
             "name": "Georgy Bazhukov",
-            "email": "bugov@webmotor.ru",
+            "email": "gosha@bugov.net",
             "homepage": "http://gosha.bugov.net/"
         }
     ],
     "license": "The Artistic License 2.0",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.3.3",
         "zendframework/zendframework": "2.*"
     },
     "autoload": {

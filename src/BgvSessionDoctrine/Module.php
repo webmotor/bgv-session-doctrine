@@ -5,23 +5,34 @@ use Zend\Session\Config\SessionConfig;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
 
+/**
+ * Class Module
+ * @package BgvSessionDoctrine
+ */
 class Module
 {
+    /**
+     * @param \Zend\EventManager\EventInterface $e
+     */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
         $sm = $e->getApplication()->getServiceManager();
 
         $sessionManager = $sm->get('session_save_manager');
         Container::setDefaultManager($sessionManager);
+        register_shutdown_function('session_write_close');
         $sessionManager->start();
     }
 
+    /**
+     * @return array
+     */
     public function getServiceConfig()
     {
         return array(
             'factories' => array(
                 'session_save_handler' => function ($serviceManager) {
-                    $saveHandler = new SaveHandler\DoctrineORM();
+                    $saveHandler = new SaveHandler\DoctrineORM($serviceManager);
                     return $saveHandler;
                 },
                 'session_options' => function ($serviceManager) {
@@ -47,11 +58,17 @@ class Module
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
     }
 
+    /**
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return array(

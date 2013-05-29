@@ -40,7 +40,7 @@ class DoctrineORM implements SaveHandlerInterface
      * DoctrineORM repository's name
      * @var string
      */
-    protected $repositoryName = '\BgvSessionDoctrine\Entity\SessionRepository';
+    protected $repositoryName = '\BgvSessionDoctrine\Repository\SessionRepository';
 
     /**
      * Options
@@ -56,10 +56,9 @@ class DoctrineORM implements SaveHandlerInterface
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($serviceManager)
     {
-        // \WmRegistry\ServiceLocator - just service locator like \ServiceLocatorFactory\ServiceLocatorFactory
-        $this->em = \WmRegistry\ServiceLocator::getInstance()->get('doctrine.entitymanager.orm_default');
+        $this->em = $serviceManager->get('doctrine.entitymanager.orm_default');
     }
 
     /**
@@ -92,7 +91,7 @@ class DoctrineORM implements SaveHandlerInterface
      */
     public function read($id)
     {
-        $session = $this->em->getRepository($this->repositoryName)
+        $session = $this->em->getRepository($this->entityName)
             ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
 
         if (!is_null($session)) {
@@ -112,7 +111,7 @@ class DoctrineORM implements SaveHandlerInterface
      */
     public function write($id, $data)
     {
-        $session = $this->em->getRepository($this->repositoryName)
+        $session = $this->em->getRepository($this->entityName)
             ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
 
         if (is_null($session)) {
@@ -121,7 +120,7 @@ class DoctrineORM implements SaveHandlerInterface
             $session->setName($this->sessionName);
         }
 
-        $session->setModify(time());
+        $session->setModified(time());
         $session->setData((string)$data);
         $session->setLifetime($this->lifetime);
 
@@ -138,7 +137,7 @@ class DoctrineORM implements SaveHandlerInterface
      */
     public function destroy($id)
     {
-        $session = $this->em->getRepository($this->repositoryName)
+        $session = $this->em->getRepository($this->entityName)
             ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
 
         if (!is_null($session)) {
