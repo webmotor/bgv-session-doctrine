@@ -34,6 +34,11 @@ Create `session` table into database by command
 
     ./path/to/bin/doctrine-module orm:schema-tool:update --force
 
+# Configuration
+
+Copy file `./vendor/bugov/bgv-session-doctrine/config/bgv-session-doctrine.global.php.dist` to
+`./config/autoload/bgv-session-doctrine.global.php`.
+
 # Copyright and license
 
 Copyright (C) 2013, Georgy Bazhukov.
