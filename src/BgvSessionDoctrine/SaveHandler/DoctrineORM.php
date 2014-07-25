@@ -95,7 +95,10 @@ class DoctrineORM implements SaveHandlerInterface
         try {
             $session = $this->em->getRepository($this->entityName)
                 ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
+<<<<<<< HEAD
 
+=======
+>>>>>>> adc13b933b22078544100afe105c05a311e12912
             if (!is_null($session)) {
                 if ($session->getModified() + $session->getLifetime() > time()) {
                     return $session->getData();
@@ -119,6 +122,7 @@ class DoctrineORM implements SaveHandlerInterface
         try {
 
 
+<<<<<<< HEAD
             $session = $this->em->getRepository($this->entityName)
                 ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
 
@@ -127,6 +131,11 @@ class DoctrineORM implements SaveHandlerInterface
                 $session->setId($id);
                 $session->setName($this->sessionName);
             }
+=======
+        $session->setModified(time());
+        $session->setData((string) $data);
+        $session->setLifetime($this->lifetime);
+>>>>>>> adc13b933b22078544100afe105c05a311e12912
 
             $session->setModified(time());
             $session->setData((string) $data);
