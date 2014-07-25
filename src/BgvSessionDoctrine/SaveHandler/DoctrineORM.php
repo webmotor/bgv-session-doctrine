@@ -12,6 +12,7 @@ use Zend\Session\SaveHandler\SaveHandlerInterface;
  */
 class DoctrineORM implements SaveHandlerInterface
 {
+
     /**
      * Session Save Path
      * @var string
@@ -70,8 +71,8 @@ class DoctrineORM implements SaveHandlerInterface
     public function open($savePath, $name)
     {
         $this->sessionSavePath = $savePath;
-        $this->sessionName = $name;
-        $this->lifetime = ini_get('session.gc_maxlifetime');
+        $this->sessionName     = $name;
+        $this->lifetime        = ini_get('session.gc_maxlifetime');
         return true;
     }
 
@@ -91,14 +92,17 @@ class DoctrineORM implements SaveHandlerInterface
      */
     public function read($id)
     {
-        $session = $this->em->getRepository($this->entityName)
-            ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
-
-        if (!is_null($session)) {
-            if ($session->getModified() + $session->getLifetime() > time()) {
-                return $session->getData();
+        try {
+            $session = $this->em->getRepository($this->entityName)
+                ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
+            if (!is_null($session)) {
+                if ($session->getModified() + $session->getLifetime() > time()) {
+                    return $session->getData();
+                }
+                $this->destroy($id);
             }
-            $this->destroy($id);
+        } catch (\Exception $ex) {
+            
         }
         return '';
     }
@@ -121,7 +125,7 @@ class DoctrineORM implements SaveHandlerInterface
         }
 
         $session->setModified(time());
-        $session->setData((string)$data);
+        $session->setData((string) $data);
         $session->setLifetime($this->lifetime);
 
         $this->em->persist($session);
@@ -158,4 +162,5 @@ class DoctrineORM implements SaveHandlerInterface
         $this->em->createQuery($dql)->setParameter('time', time())->execute();
         return true;
     }
+
 }
