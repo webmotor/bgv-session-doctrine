@@ -12,6 +12,7 @@ use Zend\Session\SaveHandler\SaveHandlerInterface;
  */
 class DoctrineORM implements SaveHandlerInterface
 {
+
     /**
      * Session Save Path
      * @var string
@@ -70,8 +71,8 @@ class DoctrineORM implements SaveHandlerInterface
     public function open($savePath, $name)
     {
         $this->sessionSavePath = $savePath;
-        $this->sessionName = $name;
-        $this->lifetime = ini_get('session.gc_maxlifetime');
+        $this->sessionName     = $name;
+        $this->lifetime        = ini_get('session.gc_maxlifetime');
         return true;
     }
 
@@ -91,14 +92,18 @@ class DoctrineORM implements SaveHandlerInterface
      */
     public function read($id)
     {
-        $session = $this->em->getRepository($this->entityName)
-            ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
+        try {
+            $session = $this->em->getRepository($this->entityName)
+                ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
 
-        if (!is_null($session)) {
-            if ($session->getModified() + $session->getLifetime() > time()) {
-                return $session->getData();
+            if (!is_null($session)) {
+                if ($session->getModified() + $session->getLifetime() > time()) {
+                    return $session->getData();
+                }
+                $this->destroy($id);
             }
-            $this->destroy($id);
+        } catch (\Exception $ex) {
+            
         }
         return '';
     }
@@ -111,22 +116,27 @@ class DoctrineORM implements SaveHandlerInterface
      */
     public function write($id, $data)
     {
-        $session = $this->em->getRepository($this->entityName)
-            ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
+        try {
 
-        if (is_null($session)) {
-            $session = new $this->entityName;
-            $session->setId($id);
-            $session->setName($this->sessionName);
+
+            $session = $this->em->getRepository($this->entityName)
+                ->findOneBy(array('id' => $id, 'name' => $this->sessionName));
+
+            if (is_null($session)) {
+                $session = new $this->entityName;
+                $session->setId($id);
+                $session->setName($this->sessionName);
+            }
+
+            $session->setModified(time());
+            $session->setData((string) $data);
+            $session->setLifetime($this->lifetime);
+
+            $this->em->persist($session);
+            $this->em->flush();
+        } catch (\Exception $ex) {
+            
         }
-
-        $session->setModified(time());
-        $session->setData((string)$data);
-        $session->setLifetime($this->lifetime);
-
-        $this->em->persist($session);
-        $this->em->flush();
-
         return true;
     }
 
@@ -158,4 +168,5 @@ class DoctrineORM implements SaveHandlerInterface
         $this->em->createQuery($dql)->setParameter('time', time())->execute();
         return true;
     }
+
 }
